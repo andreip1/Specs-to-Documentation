@@ -1,4 +1,5 @@
-Specs To Documentation → Onboarding Docs (LLM-assisted)
+### Vibe coded alpha
+# Specs To Documentation → Onboarding Docs (LLM-assisted)
 
 spec_to_doc_2 turns your RSpec files into developer-friendly onboarding documentation. Instead of listing APIs, it infers domain purpose, usage patterns, workflows, and quirks from your specs.
 
