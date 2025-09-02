@@ -2,5 +2,6 @@
 source 'https://rubygems.org'
 
 gem 'base64'
-gem 'rspec'gem 'ruby-openai'
+gem 'rspec'
+gem 'ruby-openai'
 
