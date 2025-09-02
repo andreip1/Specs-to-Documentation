@@ -126,31 +126,15 @@ class SpecToDoc2Generator
     MD
   end
 
-  def supports_responses_api?
-    @client.respond_to?(:responses) && @client.responses.respond_to?(:create)
-  rescue StandardError
-    false
-  end
-
   def call_llm(messages)
-    if supports_responses_api?
-      res = @client.responses.create(
-        parameters: {
-          model: @model,
-          input: messages,
-          reasoning: { effort: @reasoning_effort }
-        }
-      )
-      res.dig('output', 1, 'content', 0, 'text') || res.dig('output', 0, 'content', 0, 'text')
-    else
-      res = @client.chat(
-        parameters: {
-          model: @model,
-          messages: messages.map { |m| { role: m[:role], content: m[:content] } }
-        }
-      )
-      res.dig('choices', 0, 'message', 'content')
-    end
+    res = @client.responses.create(
+      parameters: {
+        model: @model,
+        input: messages,
+        reasoning: { effort: @reasoning_effort }
+      }
+    )
+    res.dig('output', 1, 'content', 0, 'text') || res.dig('output', 0, 'content', 0, 'text')
   end
 end
 

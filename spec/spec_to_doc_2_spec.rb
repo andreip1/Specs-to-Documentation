@@ -63,37 +63,7 @@ RSpec.describe SpecToDoc2Generator do
         expect(md).to include("# File: #{f2}")
       end
     end
-
-    it 'falls back to the Chat API when Responses API is unavailable' do
-      Dir.mktmpdir do |dir|
-        write_spec(dir, 'spec/a_spec.rb')
-        out = File.join(dir, 'out.md')
-
-        client_double = instance_double('OpenAI::Client')
-        allow(OpenAI::Client).to receive(:new).and_return(client_double)
-
-        allow(client_double).to receive(:respond_to?).with(:responses).and_return(false)
-        allow(client_double).to receive(:chat).and_return(
-          { 'choices' => [{ 'message' => { 'content' => 'Chat Doc' } }] }
-        )
-
-        generator = described_class.new(
-          path: File.join(dir, 'spec'),
-          out: out,
-          files_per_batch: nil,
-          model: 'gpt-5-mini',
-          reasoning_effort: 'low',
-          sleep_between: 0.0
-        )
-
-        generator.run
-
-        md = File.read(out)
-        expect(md).to include('## Batch 1')
-        expect(md).to include('Chat Doc')
-      end
-    end
-
+    
     it 'handles single-file input and respects max_chars batching' do
       Dir.mktmpdir do |dir|
         file = write_spec(dir, 'only_spec.rb', body: 'RSpec.describe("Y") { }' * 10)
